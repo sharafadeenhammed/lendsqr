@@ -1,6 +1,10 @@
 import connectDb, { connectDbAsync, db, query } from "./config/db";
 import colors from "colors";
-
+import path from "path";
+import dotenv from "dotenv";
+// load enviroment variables...
+dotenv.config({ path: path.join(__dirname, "../", "config.env") });
+console.log("database name: ", process.env.DATABASE_NAME);
 connectDbAsync();
 
 //interface for table object
@@ -54,6 +58,7 @@ const tables: Array<tableObject> = [
     tableName: "transactions",
     tableFields: [
       "id INT AUTO_INCREMENT NOT NULL UNIQUE",
+      "user_id INT",
       "sender_name VARCHAR(255) NOT NULL",
       "sender_email VARCHAR(255) ",
       "sender_account_number VARCHAR(255)",

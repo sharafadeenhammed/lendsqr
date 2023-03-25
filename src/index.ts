@@ -7,6 +7,8 @@ import auth from "./routes/auth";
 import account from "./routes/account";
 import transaction from "./routes/transaction";
 import errorHandler from "./utils/errorHandler";
+import cors from "cors";
+import helmet from "helmet";
 
 // load enviroment variables...
 dotenv.config({ path: path.join(__dirname, "../", "config.env") });
@@ -16,6 +18,12 @@ connectDbAsync();
 const app = express();
 
 app.use(morgan("dev"));
+
+// allow request from all url
+app.use(cors());
+
+// Set security headers
+app.use(helmet());
 
 app.use(express.json());
 

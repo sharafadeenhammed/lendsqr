@@ -22,3 +22,8 @@ Run `node migration --migrate-dbs` to migrate database
 Run `node migration --migrate-tbs` to migrate database tables
 
 Run `npm start` to start the application
+
+## Documentation
+
+postman documentation
+https://documenter.getpostman.com/view/20324776/2s93RNyEuB

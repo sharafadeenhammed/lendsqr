@@ -4,7 +4,7 @@ import ErrorResponse from "../utils/errorResponse";
 import asyncHandeler from "../utils/asyncHandler";
 import { query, db } from "../config/db";
 
-//@route GET /api/v1/auth/account/:id
+//@route GET /api/v1/account/:id
 //@desc  get single account
 //@access PRIVATE
 export const getAccount = asyncHandeler(
@@ -34,7 +34,7 @@ export const getAccount = asyncHandeler(
   }
 );
 
-//@route GET /api/v1/auth/account/user
+//@route GET /api/v1/account/user
 //@desc  get account related to user
 //@access PRIVATE
 export const getAccounts = asyncHandeler(

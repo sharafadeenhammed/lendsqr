@@ -7,11 +7,20 @@ export const addTransaction = async (transaction: Tranaction): Promise<any> => {
 };
 
 export const findTransction = async (id: number): Promise<any> => {
-  const queryStr = `SELECT * FROM transactions WHERE id = ${id}`;
+  const queryStr = `SELECT * FROM transactions WHERE id = ${db.escape(id)}`;
   return query(queryStr);
 };
 
-export const findTransctions = async (userId: number): Promise<any> => {
-  const queryStr = `SELECT * FROM transactions WHERE beneficiary_id = ${userId} OR sender_id = ${userId}`;
+export const accountTransctions = async (accountId: number): Promise<any> => {
+  const queryStr = `SELECT * FROM transactions WHERE account_id = ${db.escape(
+    accountId
+  )} OR beneficiary_account_id = ${db.escape(accountId)}`;
+  return query(queryStr);
+};
+
+export const userTransctions = async (userId: number): Promise<any> => {
+  const queryStr = `SELECT * FROM transactions WHERE user_id = ${db.escape(
+    userId
+  )}`;
   return query(queryStr);
 };

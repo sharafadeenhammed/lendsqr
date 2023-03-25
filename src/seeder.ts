@@ -5,7 +5,7 @@ import colors from "colors";
 connectDb;
 
 // seeding database
-if (process.argv[2] === "--seed") {
+if (process.argv[2] === "--seed-user") {
 }
 process.exit(0);
 

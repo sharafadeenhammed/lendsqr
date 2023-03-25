@@ -2,14 +2,14 @@ import { Req, Res, Next } from "../utils/interface";
 import { findAccount, findAccounts } from "../model/Account";
 import ErrorResponse from "../utils/errorResponse";
 import asyncHandeler from "../utils/asyncHandler";
-import { db } from "../config/db";
+import { query, db } from "../config/db";
 
-//@route GET /api/v1/auth/user/:id/account
+//@route GET /api/v1/auth/account/:id
 //@desc  get single account
 //@access PRIVATE
 export const getAccount = asyncHandeler(
   async (req: Req, res: Res, next: Next) => {
-    const id = parseInt(req.params.id, 10);
+    const id: number = parseInt(req.params.id, 10);
     let account = await findAccount(id);
     // check if account is succesfully fetched...
     if (!account || account.length === 0) {
@@ -34,20 +34,13 @@ export const getAccount = asyncHandeler(
   }
 );
 
-//@route GET /api/v1/auth/user/:id/accounts
+//@route GET /api/v1/auth/account/user
 //@desc  get account related to user
 //@access PRIVATE
 export const getAccounts = asyncHandeler(
   async (req: Req, res: Res, next: Next) => {
-    const userId = parseInt(req.params.id, 10);
-    // check if the id match the logged in user
-    if (req.user.id !== userId) {
-      return next(
-        new ErrorResponse("not authorised to access this accounts", 401)
-      );
-    }
+    const userId: number = parseInt(req.user.id, 10);
     let accounts = await findAccounts(userId);
-
     // check if account found;
     if (!accounts || accounts.length === 0) {
       return next(
@@ -57,10 +50,10 @@ export const getAccounts = asyncHandeler(
         )
       );
     }
-    accounts = JSON.parse(JSON.stringify(accounts[0]));
-
+    accounts = JSON.parse(JSON.stringify(accounts));
     res.status(200).json({
       success: true,
+      count: accounts.length || 0,
       data: accounts,
     });
   }

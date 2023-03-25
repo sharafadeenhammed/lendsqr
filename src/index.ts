@@ -5,6 +5,7 @@ import path from "path";
 import { connectDbAsync } from "./config/db";
 import auth from "./routes/auth";
 import account from "./routes/account";
+import transaction from "./routes/transaction";
 import errorHandler from "./utils/errorHandler";
 
 // load enviroment variables...
@@ -31,7 +32,9 @@ app.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
 app.use("/api/v1/auth", auth);
 
-app.use("/api/v1/user", account);
+app.use("/api/v1/account", account);
+
+app.use("/api/v1/transaction", transaction);
 
 // mounting error handler middleware...
 app.use(errorHandler);

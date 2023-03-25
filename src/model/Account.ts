@@ -18,8 +18,15 @@ export const addAccount = async (
 };
 
 export const findAccount = async (id: number): Promise<any> => {
-  const queryStr: string = `SELECT * FROM accounts WHERE user_id = ${db.escape(
-    id
+  const queryStr: string = `SELECT * FROM accounts WHERE id = ${db.escape(id)}`;
+  return query(queryStr);
+};
+
+export const findAccountByAccountNumber = async (
+  accountNumber: number
+): Promise<any> => {
+  const queryStr: string = `SELECT * FROM accounts WHERE account_number = ${db.escape(
+    accountNumber
   )}`;
   return query(queryStr);
 };
@@ -34,6 +41,6 @@ export const findAccounts = async (userId: number): Promise<any> => {
 export const updateAccount = async (id: number, amount: number) => {
   const queryStr: string = `UPDATE accounts SET balance = ${db.escape(
     amount
-  )} ? WHERE id = ${db.escape(id)}`;
+  )}  WHERE id = ${db.escape(id)}  `;
   return query(queryStr);
 };

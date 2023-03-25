@@ -1,7 +1,7 @@
 import asyncHandeler from "../utils/asyncHandler";
 import ErrorResponse from "../utils/errorResponse";
 import bcrypt from "bcryptjs";
-import { Req, Res, Next, jwtInterface } from "../utils/interface";
+import { Req, Res, Next, JwtInterface } from "../utils/interface";
 import { db, query } from "../config/db";
 import jwt from "jsonwebtoken";
 import { addAccount } from "../model/Account";
@@ -60,7 +60,7 @@ export const login = asyncHandeler(async (req: Req, res: Res, next: Next) => {
   }
 
   // generate token
-  const jwtPayload: jwtInterface = {
+  const jwtPayload: JwtInterface = {
     id: user.id,
     email: user.email,
     firstName: user.first_name,

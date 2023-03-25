@@ -123,9 +123,9 @@ export const getTransaction = asyncHandeler(
       );
     }
     // check if transaction belongs to user
-    if (!transaction.user_id || req.user.id) {
+    if (transaction.user_id !== req.user.id) {
       return next(
-        new ErrorResponse(`unauthorized transaction access "id: ${id}"`, 401)
+        new ErrorResponse(`unauthorized transaction access 'id: ${id}'`, 401)
       );
     }
     transaction = JSON.parse(JSON.stringify(transaction[0]));

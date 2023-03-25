@@ -7,7 +7,7 @@ exports.getAccounts = exports.getAccount = void 0;
 const Account_1 = require("../model/Account");
 const errorResponse_1 = __importDefault(require("../utils/errorResponse"));
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
-//@route GET /api/v1/auth/account/:id
+//@route GET /api/v1/account/:id
 //@desc  get single account
 //@access PRIVATE
 exports.getAccount = (0, asyncHandler_1.default)(async (req, res, next) => {
@@ -27,7 +27,7 @@ exports.getAccount = (0, asyncHandler_1.default)(async (req, res, next) => {
         data: account,
     });
 });
-//@route GET /api/v1/auth/account/user
+//@route GET /api/v1/account/user
 //@desc  get account related to user
 //@access PRIVATE
 exports.getAccounts = (0, asyncHandler_1.default)(async (req, res, next) => {

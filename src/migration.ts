@@ -45,7 +45,6 @@ const tables: Array<tableObject> = [
       "balance float",
       "age INT NOT NULL",
       "phone_number VARCHAR(255) NOT NULL UNIQUE",
-      // "account_number VARCHAR(255) NOT NULL UNIQUE",
       "created_at TIMESTAMP",
       "address VARCHAR(255)",
       "account_deleted binary",

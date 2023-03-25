@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./dist/index.js",
-    "migration": "node ./dist/migration.js",
-    "seed": "node ./dist/seeder.js"
+    "start": "node ./dist/index.js"
   },
   "author": "sharafadeen hammed",
   "license": "ISC",

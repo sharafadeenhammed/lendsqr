@@ -9,10 +9,11 @@ const mysql_1 = __importDefault(require("mysql"));
 const util_1 = __importDefault(require("util"));
 // create connection
 const connection = mysql_1.default.createConnection({
-    host: "localhost",
-    user: process.env.DATABASE_USERNAME || "hammed",
-    password: process.env.DATABASE_PASSWORD || "hammed123456",
-    database: process.env.DATABASE_NAME || "lendsqr",
+    host: "mysql-117565-0.cloudclusters.net",
+    user: "admin",
+    password: "AmEgwTBs",
+    database: "lendsqr",
+    port: 10036, //process.env.DATABASE_PORT.toString(),
 });
 exports.query = util_1.default.promisify(connection.query).bind(connection);
 exports.connect = util_1.default.promisify(connection.query).bind(connection);

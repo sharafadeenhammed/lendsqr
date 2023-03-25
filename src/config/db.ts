@@ -4,10 +4,11 @@ import util from "util";
 
 // create connection
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: process.env.DATABASE_USERNAME || "hammed",
-  password: process.env.DATABASE_PASSWORD || "hammed123456",
-  database: process.env.DATABASE_NAME || "lendsqr",
+  host: "mysql-117565-0.cloudclusters.net", //process.env.DATABASE_HOST || "localhost",
+  user: "admin", //process.env.DATABASE_USERNAME || "hammed",
+  password: "AmEgwTBs", //process.env.DATABASE_PASSWORD || "hammed123456",
+  database: "lendsqr", //process.env.DATABASE_NAME || "lendsqr",
+  port: 10036, //process.env.DATABASE_PORT.toString(),
 });
 export const query = util.promisify(connection.query).bind(connection);
 export const connect = util.promisify(connection.query).bind(connection);

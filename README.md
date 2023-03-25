@@ -25,5 +25,10 @@ Run `npm start` to start the application
 
 ## Documentation
 
-postman documentation
+#### Postman documentation link
+
 https://documenter.getpostman.com/view/20324776/2s93RNyEuB
+
+#### Service Link
+
+https://lendsqr-vzjz.onrender.com/api/v1

@@ -61,7 +61,7 @@ export const makeTransaction = asyncHandeler(
     amount = beneficiaryAccount.balance + req.body.amount;
     await updateAccount(beneficiaryAccount.id, amount);
 
-    // debit the sender account
+    // debit the sender account.
     amount = senderAccount.balance - req.body.amount;
     await updateAccount(senderAccount.id, amount || 0);
 

@@ -28,8 +28,8 @@ exports.makeTransaction = (0, asyncHandler_1.default)(async (req, res, next) => 
     // check request body data
     let amount = req.body.amount;
     let accountNumber = req.body.beneficiaryAccount;
-    if (!amount || !accountNumber) {
-        return next(new errorResponse_1.default("include beneficiaryAccount and amount in body", 400));
+    if (!amount || !accountNumber || amount < 0) {
+        return next(new errorResponse_1.default("include a beneficiaryAccount and amount in body", 400));
     }
     console.log("okay till data check");
     // find beneficaiary account

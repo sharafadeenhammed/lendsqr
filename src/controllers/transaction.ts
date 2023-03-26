@@ -34,9 +34,12 @@ export const makeTransaction = asyncHandeler(
     // check request body data
     let amount: number = req.body.amount;
     let accountNumber: number = req.body.beneficiaryAccount;
-    if (!amount || !accountNumber) {
+    if (!amount || !accountNumber || amount < 0) {
       return next(
-        new ErrorResponse("include beneficiaryAccount and amount in body", 400)
+        new ErrorResponse(
+          "include a beneficiaryAccount and amount in body",
+          400
+        )
       );
     }
     console.log("okay till data check");

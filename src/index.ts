@@ -32,9 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "../", "public")));
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  res
-    .status(302)
-    .redirect("https://documenter.getpostman.com/view/20324776/2s93RNyEuB");
+  res.status(302).redirect(`${req.protocol}://${req.hostname}/index.html`);
 });
 
 app.use("/api/v1/auth", auth);
@@ -45,6 +43,7 @@ app.use("/api/v1/transaction", transaction);
 
 // mounting error handler middleware...
 app.use(errorHandler);
+
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {

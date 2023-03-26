@@ -27,9 +27,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.static(path_1.default.join(__dirname, "../", "public")));
 app.get("/", async (req, res, next) => {
-    res
-        .status(302)
-        .redirect("https://documenter.getpostman.com/view/20324776/2s93RNyEuB");
+    res.status(302).redirect(`${req.protocol}://${req.hostname}/index.html`);
 });
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/account", account_1.default);

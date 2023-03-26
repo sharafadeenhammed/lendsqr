@@ -32,10 +32,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "../", "public")));
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  res.json({
-    hit: "route hit...",
-  });
-  next();
+  res
+    .status(200)
+    .header("text/html")
+    .sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.use("/api/v1/auth", auth);

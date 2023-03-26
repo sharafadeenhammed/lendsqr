@@ -106,8 +106,6 @@ exports.getTransaction = (0, asyncHandler_1.default)(async (req, res, next) => {
     transaction = JSON.parse(JSON.stringify(transaction[0]));
     // check if transaction belongs to user
     if (transaction.user_id !== req.user.id) {
-        console.log("trsnsaction:", transaction.user_id);
-        console.log("user:", req.user.id);
         return next(new errorResponse_1.default(`unauthorized transaction access 'id: ${id}'`, 401));
     }
     res.status(200).json({

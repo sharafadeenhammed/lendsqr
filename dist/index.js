@@ -27,10 +27,10 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.static(path_1.default.join(__dirname, "../", "public")));
 app.get("/", async (req, res, next) => {
-    res.json({
-        hit: "route hit...",
-    });
-    next();
+    res
+        .status(200)
+        .header("text/html")
+        .sendFile(path_1.default.join(__dirname, "public", "index.html"));
 });
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/account", account_1.default);

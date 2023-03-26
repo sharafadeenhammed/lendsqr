@@ -33,9 +33,8 @@ app.use(express.static(path.join(__dirname, "../", "public")));
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
   res
-    .status(200)
-    .header("text/html")
-    .sendFile(path.join(__dirname, "public", "index.html"));
+    .status(302)
+    .redirect("https://documenter.getpostman.com/view/20324776/2s93RNyEuB");
 });
 
 app.use("/api/v1/auth", auth);

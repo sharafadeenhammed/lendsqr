@@ -32,7 +32,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "../", "public")));
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  res.status(302).redirect(`${req.protocol}://${req.hostname}/index.html`);
+  res
+    .status(302)
+    .redirect("https://documenter.getpostman.com/view/20324776/2s93RNyEuB");
 });
 
 app.use("/api/v1/auth", auth);

@@ -42,13 +42,11 @@ export const makeTransaction = asyncHandeler(
         )
       );
     }
-    console.log("okay till data check");
     // find beneficaiary account
     let beneficiaryAccount: any = await findAccountByAccountNumber(
       parseInt(req.body.beneficiaryAccount, 10)
     );
 
-    console.log("beneficiary account found");
     if (!beneficiaryAccount || beneficiaryAccount.length === 0) {
       return next(new ErrorResponse("beneficiary account not found", 404));
     }

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { connectDbAsync } from "../config/db";
 
 let resData = {};
 async function errorHandler(
@@ -13,6 +14,9 @@ async function errorHandler(
       verboseMessage: data.msg.sqlMessage,
       message: "duplicate field value entered",
     };
+  }
+  if (data.message == "read ECONNRESET") {
+    connectDbAsync();
   }
 
   res.status(data.statusCode || 500).json({

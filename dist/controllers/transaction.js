@@ -31,10 +31,8 @@ exports.makeTransaction = (0, asyncHandler_1.default)(async (req, res, next) => 
     if (!amount || !accountNumber || amount < 0) {
         return next(new errorResponse_1.default("include a beneficiaryAccount and amount in body", 400));
     }
-    console.log("okay till data check");
     // find beneficaiary account
     let beneficiaryAccount = await (0, Account_1.findAccountByAccountNumber)(parseInt(req.body.beneficiaryAccount, 10));
-    console.log("beneficiary account found");
     if (!beneficiaryAccount || beneficiaryAccount.length === 0) {
         return next(new errorResponse_1.default("beneficiary account not found", 404));
     }

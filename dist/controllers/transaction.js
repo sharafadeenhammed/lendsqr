@@ -46,7 +46,7 @@ exports.makeTransaction = (0, asyncHandler_1.default)(async (req, res, next) => 
     // credit the beneficiary account
     amount = beneficiaryAccount.balance + req.body.amount;
     await (0, Account_1.updateAccount)(beneficiaryAccount.id, amount);
-    // debit the sender account
+    // debit the sender account.
     amount = senderAccount.balance - req.body.amount;
     await (0, Account_1.updateAccount)(senderAccount.id, amount || 0);
     //generate beneficiary transaction receipt

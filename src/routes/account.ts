@@ -5,9 +5,6 @@ import { getAccount, getAccounts, fundAccount } from "../controllers/account";
 const routes = express.Router();
 
 routes.get("/user", protect, getAccounts);
-
-routes.post("/:id/fund", protect, fundAccount);
-
-routes.get("/:id", protect, getAccount);
+routes.route("/:id").post(protect, fundAccount).get(protect, getAccount);
 
 export default routes;

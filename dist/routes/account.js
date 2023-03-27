@@ -8,6 +8,5 @@ const auth_1 = require("../middleware/auth");
 const account_1 = require("../controllers/account");
 const routes = express_1.default.Router();
 routes.get("/user", auth_1.protect, account_1.getAccounts);
-routes.post("/:id/fund", auth_1.protect, account_1.fundAccount);
-routes.get("/:id", auth_1.protect, account_1.getAccount);
+routes.route("/:id").post(auth_1.protect, account_1.fundAccount).get(auth_1.protect, account_1.getAccount);
 exports.default = routes;

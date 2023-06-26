@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -11,8 +20,8 @@ const Account_1 = require("../model/Account");
 // @route POST /api/v1/transaction/account/:id
 // @desc  make transfer
 // @access PRIVATE
-exports.makeTransaction = (0, asyncHandler_1.default)(async (req, res, next) => {
-    let senderAccount = await (0, Account_1.findAccount)(parseInt(req.params.id, 10));
+exports.makeTransaction = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let senderAccount = yield (0, Account_1.findAccount)(parseInt(req.params.id, 10));
     if (!senderAccount || senderAccount.length === 0) {
         return next(new errorResponse_1.default("sender account not found", 404));
     }
@@ -32,7 +41,7 @@ exports.makeTransaction = (0, asyncHandler_1.default)(async (req, res, next) => 
         return next(new errorResponse_1.default("include a beneficiaryAccount and amount in body", 400));
     }
     // find beneficaiary account
-    let beneficiaryAccount = await (0, Account_1.findAccountByAccountNumber)(parseInt(req.body.beneficiaryAccount, 10));
+    let beneficiaryAccount = yield (0, Account_1.findAccountByAccountNumber)(parseInt(req.body.beneficiaryAccount, 10));
     if (!beneficiaryAccount || beneficiaryAccount.length === 0) {
         return next(new errorResponse_1.default("beneficiary account not found", 404));
     }
@@ -43,12 +52,12 @@ exports.makeTransaction = (0, asyncHandler_1.default)(async (req, res, next) => 
     }
     // credit the beneficiary account
     amount = beneficiaryAccount.balance + req.body.amount;
-    await (0, Account_1.updateAccount)(beneficiaryAccount.id, amount);
+    yield (0, Account_1.updateAccount)(beneficiaryAccount.id, amount);
     // debit the sender account.
     amount = senderAccount.balance - req.body.amount;
-    await (0, Account_1.updateAccount)(senderAccount.id, amount || 0);
+    yield (0, Account_1.updateAccount)(senderAccount.id, amount || 0);
     //generate beneficiary transaction receipt
-    await (0, Transaction_1.addTransaction)({
+    yield (0, Transaction_1.addTransaction)({
         amount: req.body.amount,
         beneficiary_account_id: beneficiaryAccount.id,
         beneficiary_account_number: beneficiaryAccount.account_number,
@@ -62,7 +71,7 @@ exports.makeTransaction = (0, asyncHandler_1.default)(async (req, res, next) => 
         account_id: beneficiaryAccount.id,
     });
     //generate sender transaction receipt
-    await (0, Transaction_1.addTransaction)({
+    yield (0, Transaction_1.addTransaction)({
         amount: req.body.amount,
         beneficiary_account_id: beneficiaryAccount.id,
         beneficiary_account_number: beneficiaryAccount.account_number,
@@ -91,13 +100,13 @@ exports.makeTransaction = (0, asyncHandler_1.default)(async (req, res, next) => 
             account_id: senderAccount.id,
         },
     });
-});
+}));
 // @route GET /api/v1/transaction/:id
 // @desc  get single transaction
 // @access PRIVATE
-exports.getTransaction = (0, asyncHandler_1.default)(async (req, res, next) => {
+exports.getTransaction = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id, 10);
-    let transaction = await (0, Transaction_1.findTransction)(id);
+    let transaction = yield (0, Transaction_1.findTransction)(id);
     if (!transaction || transaction.length === 0) {
         return next(new errorResponse_1.default(`transaction with the id of ${id} not found`, 404));
     }
@@ -110,13 +119,13 @@ exports.getTransaction = (0, asyncHandler_1.default)(async (req, res, next) => {
         success: true,
         data: transaction,
     });
-});
+}));
 // @route GET /api/v1/transaction/account/:id
 // @desc  get all transaction associated to an account
 // @access PRIVATE
-exports.getTransactions = (0, asyncHandler_1.default)(async (req, res, next) => {
+exports.getTransactions = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id, 10);
-    let transactions = await (0, Transaction_1.accountTransctions)(id);
+    let transactions = yield (0, Transaction_1.accountTransctions)(id);
     if (!transactions || transactions.length === 0) {
         return next(new errorResponse_1.default(`transactions for account with the id of ${id} not found`, 404));
     }
@@ -126,13 +135,13 @@ exports.getTransactions = (0, asyncHandler_1.default)(async (req, res, next) => 
         count: transactions.length,
         data: transactions,
     });
-});
+}));
 // @route GET /api/v1/transaction
 // @desc  get all transaction associated to user
 // @access PRIVATE
-exports.userTransaction = (0, asyncHandler_1.default)(async (req, res, next) => {
+exports.userTransaction = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.user.id, 10);
-    let transactions = await (0, Transaction_1.userTransctions)(id);
+    let transactions = yield (0, Transaction_1.userTransctions)(id);
     if (!transactions || transactions.length === 0) {
         return next(new errorResponse_1.default(`transactions for user with the id of ${id} not found`, 404));
     }
@@ -142,4 +151,4 @@ exports.userTransaction = (0, asyncHandler_1.default)(async (req, res, next) => 
         count: transactions.length,
         data: transactions,
     });
-});
+}));

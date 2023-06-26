@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -14,30 +23,30 @@ const User_1 = require("../model/User");
 // @route POST /api/v1/auth/register
 // @desc  register user
 // @access PUBLIC
-exports.createUser = (0, asyncHandler_1.default)(async (req, res, next) => {
+exports.createUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.body;
     // hashing password...
     const salt = bcryptjs_1.default.genSaltSync(10);
     const hashedPassword = bcryptjs_1.default.hashSync(user.password, salt);
     user.password = hashedPassword;
     // adding user profile to database...
-    user = await (0, User_1.addUser)(user);
+    user = yield (0, User_1.addUser)(user);
     user = JSON.parse(JSON.stringify(user));
     // create user account
-    const account = await (0, Account_1.addAccount)(user.insertId, "saving", 0, `${req.body.first_name} ${req.body.last_name}`);
+    const account = yield (0, Account_1.addAccount)(user.insertId, "saving", 0, `${req.body.first_name} ${req.body.last_name}`);
     user = req.body;
     delete user.password;
     res.status(201).json({
         success: true,
         data: user,
     });
-});
+}));
 // @route POST /api/v1/auth/login
 // @desc  login user
 // @access PUBLIC
-exports.login = (0, asyncHandler_1.default)(async (req, res, next) => {
+exports.login = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const query = `SELECT id, email, password FROM users WHERE email = '${db_1.db.escape(req.body.email)}'`;
-    let user = await (0, User_1.findUser)(req.body.email);
+    let user = yield (0, User_1.findUser)(req.body.email);
     if (user.length === 0) {
         return next(new errorResponse_1.default("invalid login credentials", 404));
     }
@@ -63,12 +72,12 @@ exports.login = (0, asyncHandler_1.default)(async (req, res, next) => {
         success: true,
         token,
     });
-});
+}));
 // @route GET /api/v1/auth/getme
 // @desc  get logged user
 // @access PRIVATE
-exports.getUser = (0, asyncHandler_1.default)(async (req, res, next) => {
-    let user = await (0, User_1.findUser)(req.user.email);
+exports.getUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = yield (0, User_1.findUser)(req.user.email);
     if (!user || user.lenth === 0) {
         return next(new errorResponse_1.default("not authorized to access this route", 401));
     }
@@ -78,4 +87,4 @@ exports.getUser = (0, asyncHandler_1.default)(async (req, res, next) => {
         success: true,
         data: user,
     });
-});
+}));

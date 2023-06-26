@@ -1,5 +1,4 @@
 import connectDb, { connectDbAsync, db, query } from "./config/db";
-import colors from "colors";
 import path from "path";
 import dotenv from "dotenv";
 // load enviroment variables...

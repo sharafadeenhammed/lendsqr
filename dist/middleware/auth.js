@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,8 +16,9 @@ exports.authorize = exports.protect = void 0;
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 const errorResponse_1 = __importDefault(require("../utils/errorResponse"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-exports.protect = (0, asyncHandler_1.default)(async (req, res, next) => {
-    let token = req?.headers?.authorization || req?.cookies?.token || req?.body?.token;
+exports.protect = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c;
+    let token = ((_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.authorization) || ((_b = req === null || req === void 0 ? void 0 : req.cookies) === null || _b === void 0 ? void 0 : _b.token) || ((_c = req === null || req === void 0 ? void 0 : req.body) === null || _c === void 0 ? void 0 : _c.token);
     if (!token || token === "") {
         return next(new errorResponse_1.default("not autohorised to access this route", 401));
     }
@@ -19,8 +29,8 @@ exports.protect = (0, asyncHandler_1.default)(async (req, res, next) => {
     }
     req.user = user;
     next();
-});
-exports.authorize = (0, asyncHandler_1.default)(async (...roles) => {
+}));
+exports.authorize = (0, asyncHandler_1.default)((...roles) => __awaiter(void 0, void 0, void 0, function* () {
     // if(args.contain(res.user.role))
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
@@ -28,4 +38,4 @@ exports.authorize = (0, asyncHandler_1.default)(async (...roles) => {
         }
         next();
     };
-});
+}));

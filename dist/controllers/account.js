@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -11,9 +20,9 @@ const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 //@route GET /api/v1/account/:id
 //@desc  get single account
 //@access PRIVATE
-exports.getAccount = (0, asyncHandler_1.default)(async (req, res, next) => {
+exports.getAccount = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id, 10);
-    let account = await (0, Account_1.findAccount)(id);
+    let account = yield (0, Account_1.findAccount)(id);
     // check if account is succesfully fetched...
     if (!account || account.length === 0) {
         return next(new errorResponse_1.default(`account with the id of ${req.params.id} not found`, 404));
@@ -27,18 +36,19 @@ exports.getAccount = (0, asyncHandler_1.default)(async (req, res, next) => {
         success: true,
         data: account,
     });
-});
+}));
 //@route GET /api/v1/account/:id/fund
 //@desc  fund account
 //@access PRIVATE
-exports.fundAccount = (0, asyncHandler_1.default)(async (req, res, next) => {
-    const amount = req.body?.amount;
+exports.fundAccount = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const amount = (_a = req.body) === null || _a === void 0 ? void 0 : _a.amount;
     const id = parseInt(req.params.id, 10);
     // check if amount is not empty
     if (!amount || amount < 0) {
         return next(new errorResponse_1.default("invalid amount field in your request body ", 400));
     }
-    let account = await (0, Account_1.findAccount)(id);
+    let account = yield (0, Account_1.findAccount)(id);
     // check if account is succesfully fetched...
     if (!account || account.length === 0) {
         return next(new errorResponse_1.default(`account with the id of ${req.params.id} not found`, 404));
@@ -48,9 +58,9 @@ exports.fundAccount = (0, asyncHandler_1.default)(async (req, res, next) => {
     if (account.user_id !== req.user.id) {
         return next(new errorResponse_1.default("not unauthorized to access this account", 401));
     }
-    await (0, Account_1.updateAccount)(account.id, amount + account.balance);
+    yield (0, Account_1.updateAccount)(account.id, amount + account.balance);
     //generate beneficiary transaction receipt
-    await (0, Transaction_1.addTransaction)({
+    yield (0, Transaction_1.addTransaction)({
         amount: req.body.amount,
         beneficiary_account_id: account.id,
         beneficiary_account_number: account.account_number,
@@ -79,13 +89,13 @@ exports.fundAccount = (0, asyncHandler_1.default)(async (req, res, next) => {
             account_id: account.id,
         },
     });
-});
+}));
 //@route GET /api/v1/account/user
 //@desc  get account related to user
 //@access PRIVATE
-exports.getAccounts = (0, asyncHandler_1.default)(async (req, res, next) => {
+exports.getAccounts = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = parseInt(req.user.id, 10);
-    let accounts = await (0, Account_1.findAccounts)(userId);
+    let accounts = yield (0, Account_1.findAccounts)(userId);
     // check if account found;
     if (!accounts || accounts.length === 0) {
         return next(new errorResponse_1.default(`no account associated to user with the id ${userId} found`, 404));
@@ -96,4 +106,4 @@ exports.getAccounts = (0, asyncHandler_1.default)(async (req, res, next) => {
         count: accounts.length || 0,
         data: accounts,
     });
-});
+}));

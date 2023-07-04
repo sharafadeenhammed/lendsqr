@@ -25,6 +25,17 @@ const User_1 = require("../model/User");
 // @access PUBLIC
 exports.createUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.body;
+    console.log(user);
+    const { first_name, last_name, password, email, address, age, phone_number, } = user;
+    if (!first_name ||
+        !last_name ||
+        !password ||
+        !email ||
+        !address ||
+        !age ||
+        !phone_number) {
+        return next(new errorResponse_1.default("data field error: please include a first_name, last_name, password, email, address, age, and phone_number fields", 400));
+    }
     // hashing password...
     const salt = bcryptjs_1.default.genSaltSync(10);
     const hashedPassword = bcryptjs_1.default.hashSync(user.password, salt);

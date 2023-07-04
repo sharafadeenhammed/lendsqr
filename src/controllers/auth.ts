@@ -13,6 +13,32 @@ import { addUser, findUser } from "../model/User";
 export const createUser = asyncHandeler(
   async (req: Req, res: Res, next: Next) => {
     let user: any = req.body;
+    console.log(user);
+    const {
+      first_name,
+      last_name,
+      password,
+      email,
+      address,
+      age,
+      phone_number,
+    } = user;
+    if (
+      !first_name ||
+      !last_name ||
+      !password ||
+      !email ||
+      !address ||
+      !age ||
+      !phone_number
+    ) {
+      return next(
+        new ErrorResponse(
+          "data field error: please include a first_name, last_name, password, email, address, age, and phone_number fields",
+          400
+        )
+      );
+    }
     // hashing password...
     const salt: string = bcrypt.genSaltSync(10);
     const hashedPassword: string = bcrypt.hashSync(user.password, salt);

@@ -17,10 +17,12 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 // load enviroment variables...
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "../", "config.env") });
-console.log("database name: ", process.env.DATABASE_NAME);
-(0, db_1.connectDbAsync)();
 // add more item to databases array to create more database
 const dataBases = ["lendsqr"];
+// connect for DB migration
+if (process.argv[2] === "--migrate-dbs") {
+    (0, db_1.connectDbMigration)();
+}
 // create databases
 if (process.argv[2] === "--migrate-dbs") {
     dataBases.forEach((database) => {
@@ -86,6 +88,10 @@ const tables = [
         primaryKey: "id",
     },
 ];
+// connect to db for table migration
+if (process.argv[2] === "--migrate-tbs") {
+    (0, db_1.connectDbAsync)();
+}
 if (process.argv[2] === "--migrate-tbs") {
     tables.forEach((table) => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield (0, db_1.query)(`CREATE TABLE IF NOT EXISTS ${table.tableName}(${table.tableFields.join(", ")}, PRIMARY KEY(${table.primaryKey})) `);

@@ -1,11 +1,8 @@
-import connectDb, { connectDbAsync, db, query } from "./config/db";
+import { connectDbAsync, db, query, connectDbMigration } from "./config/db";
 import path from "path";
 import dotenv from "dotenv";
 // load enviroment variables...
 dotenv.config({ path: path.join(__dirname, "../", "config.env") });
-console.log("database name: ", process.env.DATABASE_NAME);
-connectDbAsync();
-
 //interface for table object
 interface tableObject {
   tableName: string;
@@ -15,6 +12,11 @@ interface tableObject {
 
 // add more item to databases array to create more database
 const dataBases = ["lendsqr"];
+
+// connect for DB migration
+if (process.argv[2] === "--migrate-dbs") {
+  connectDbMigration();
+}
 
 // create databases
 if (process.argv[2] === "--migrate-dbs") {
@@ -86,6 +88,10 @@ const tables: Array<tableObject> = [
   },
 ];
 
+// connect to db for table migration
+if (process.argv[2] === "--migrate-tbs") {
+  connectDbAsync();
+}
 if (process.argv[2] === "--migrate-tbs") {
   tables.forEach(async (table) => {
     const result = await query(

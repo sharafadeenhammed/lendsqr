@@ -3,7 +3,6 @@ import { findAccount, findAccounts, updateAccount } from "../model/Account";
 import { addTransaction } from "../model/Transaction";
 import ErrorResponse from "../utils/errorResponse";
 import asyncHandeler from "../utils/asyncHandler";
-import { query, db } from "../config/db";
 
 //@route GET /api/v1/account/:id
 //@desc  get single account

@@ -1,33 +1,29 @@
-// const mysql = require("mysql");
 import mysql from "mysql";
 import util from "util";
+import dotenv from "dotenv";
+dotenv.config({ path: "../../config.env" });
 // create connection
 const connection = mysql.createConnection({
-  host: "mysql-133294-0.cloudclusters.net", //process.env.DATABASE_HOST || "localhost",
-  user: "admin", //process.env.DATABASE_USERNAME || "hammed",
-  password: "9sz6mKDq", //process.env.DATABASE_PASSWORD || "hammed123456",
-  database: "lendsqr", //process.env.DATABASE_NAME || "lendsqr",
-  port: 19984, //process.env.DATABASE_PORT.toString(),
+  host: process.env.DATABASE_HOST || "sql7.freemysqlhosting.net",
+  user: process.env.DATABASE_USERNAME || "sql7630373",
+  password: process.env.DATABASE_PASSWORD || "zJXDPrc2vg",
+  database: process.env.DATABASE_NAME || "sql7630373",
+  port: Number(process.env.DATABASE_PORT) || 3306,
+});
+const connectionForDbMigrationOnly = mysql.createConnection({
+  host: process.env.DATABASE_HOST || "sql7.freemysqlhosting.net",
+  user: process.env.DATABASE_USERNAME || "sql7630373",
+  password: process.env.DATABASE_PASSWORD || "zJXDPrc2vg",
+  port: Number(process.env.DATABASE_PORT) || 3306,
 });
 export const query = util.promisify(connection.query).bind(connection);
-export const connect = util.promisify(connection.query).bind(connection);
-
-const connectDb = async () => {
-  // connect to database
-  connection.connect((err: any): void => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log(
-      `\nconnected to database ${connection.config.host} on port ${connection.config.port} and using ${connection.config.database} database \n\n`
-    );
-  });
-};
+export const connect = util.promisify(connection.connect).bind(connection);
+const connectionForDbMigration = util
+  .promisify(connectionForDbMigrationOnly.connect)
+  .bind(connectionForDbMigrationOnly);
 
 const connectindDB = async function (): Promise<any> {
-  const databaseName = process.env.DATABASE_NAME || "lendsqr";
-  connect(`CREATE DATABASE IF NOT EXISTS ${databaseName}`);
+  connect();
   console.log(
     `\nconnected to database ${connection.config.host} on port ${connection.config.port} and using ${connection.config.database} database \n\n`
   );
@@ -37,6 +33,8 @@ export const connectDbAsync = async () => {
   await connectindDB();
 };
 
-export const db = connection;
+export const connectDbMigration = async () => {
+  await connectionForDbMigration();
+};
 
-export default connectDb;
+export const db = connection;

@@ -13,7 +13,6 @@ import { addUser, findUser } from "../model/User";
 export const createUser = asyncHandeler(
   async (req: Req, res: Res, next: Next) => {
     let user: any = req.body;
-    console.log(user);
     const {
       first_name,
       last_name,

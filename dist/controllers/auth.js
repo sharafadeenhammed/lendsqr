@@ -25,7 +25,6 @@ const User_1 = require("../model/User");
 // @access PUBLIC
 exports.createUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.body;
-    console.log(user);
     const { first_name, last_name, password, email, address, age, phone_number, } = user;
     if (!first_name ||
         !last_name ||

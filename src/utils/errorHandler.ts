@@ -8,22 +8,31 @@ async function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  if (data.msg?.errno === 1062) {
+  if (data.errno === 1062) {
+    const duplicateField = data.message.split("entry")[1];
     resData = {
-      ...resData,
-      verboseMessage: data.msg.sqlMessage,
-      message: "duplicate field value entered",
+      errorMessage: data.message,
+      message: String("duplicate field value entered" + duplicateField).replace(
+        "key ",
+        ""
+      ),
+      code: data.code,
     };
   }
   if (data.message == "read ECONNRESET") {
     connectDbAsync();
   }
 
+  // check fro duplicate field entry
+  if (data.code === "ER_DUP_ENTRY") {
+    data.statusCode = 400;
+  }
+
   res.status(data.statusCode || 500).json({
     success: false,
-    verboseMessage: data.message,
-    message: resData,
-    rawMessage: data.message,
+    message: data.message,
+    stack: data.stack,
+    data: resData,
   });
 }
 

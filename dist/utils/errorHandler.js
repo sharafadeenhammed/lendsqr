@@ -12,19 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../config/db");
 let resData = {};
 function errorHandler(data, req, res, next) {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        if (((_a = data.msg) === null || _a === void 0 ? void 0 : _a.errno) === 1062) {
-            resData = Object.assign(Object.assign({}, resData), { verboseMessage: data.msg.sqlMessage, message: "duplicate field value entered" });
+        if (data.errno === 1062) {
+            const duplicateField = data.message.split("entry")[1];
+            resData = {
+                errorMessage: data.message,
+                message: String("duplicate field value entered" + duplicateField).replace("key ", ""),
+                code: data.code,
+            };
         }
         if (data.message == "read ECONNRESET") {
             (0, db_1.connectDbAsync)();
         }
+        // check fro duplicate field entry
+        if (data.code === "ER_DUP_ENTRY") {
+            data.statusCode = 400;
+        }
         res.status(data.statusCode || 500).json({
             success: false,
-            verboseMessage: data.message,
-            message: resData,
-            rawMessage: data.message,
+            message: data.message,
+            stack: data.stack,
+            data: resData,
         });
     });
 }

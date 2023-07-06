@@ -11,7 +11,7 @@
 `DATABASE_PASSWORD = "password"`
 `DATABASE_NAME = "database name"`
 `SALT = "bcrypt salt"`
-`JWT_TOKEN_EXPIRES = "json web token expiration"`
+`JWT_TOKEN_EXPIRES = "json web token expiration duration"`
 `JWT_SECRET = "json web token secret"`
 `
 

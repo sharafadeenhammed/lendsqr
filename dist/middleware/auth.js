@@ -27,7 +27,23 @@ exports.protect = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void
     if (!user) {
         return next(new errorResponse_1.default("not authorized to access this route login session expired", 401));
     }
+    // generate token
+    const jwtPayload = {
+        id: user.id,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+    };
+    const jwtToken = jsonwebtoken_1.default.sign(jwtPayload, process.env.JWT_SECRET || "lendsqr_secret", {
+        expiresIn: process.env.JWT_TOKEN_EXPIRES || "30d",
+    });
     req.user = user;
+    res.cookie("token", `token ${token}`, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 2,
+    });
     next();
 }));
 exports.authorize = (0, asyncHandler_1.default)((...roles) => __awaiter(void 0, void 0, void 0, function* () {

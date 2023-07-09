@@ -33,7 +33,7 @@ export const createUser = asyncHandeler(
     ) {
       return next(
         new ErrorResponse(
-          "data field error: please include a first_name, last_name, password, email, address, age, and phone_number fields",
+          "please include a first_name, last_name, password, email, address, age, and phone_number fields",
           400
         )
       );
@@ -44,23 +44,44 @@ export const createUser = asyncHandeler(
     user.password = hashedPassword;
 
     // adding user profile to database...
-    user = await addUser(user);
-    user = JSON.parse(JSON.stringify(user));
+    let insertUser = await addUser(user);
+    insertUser = JSON.parse(JSON.stringify(insertUser));
 
     // create user account
     const account = await addAccount(
-      user.insertId,
+      insertUser.insertId,
       "saving",
       0,
       `${req.body.first_name} ${req.body.last_name}`
     );
-
-    user = req.body;
+    // generate token
+    const jwtPayload: JwtInterface = {
+      id: insertUser.insertId,
+      email: user.email,
+      firstName: user.first_name,
+      lastName: user.last_name,
+    };
+    const token: string = jwt.sign(
+      jwtPayload,
+      process.env.JWT_SECRET || "lendsqr_secret",
+      {
+        expiresIn: process.env.JWT_TOKEN_EXPIRES || "30d",
+      }
+    );
     delete user.password;
-    res.status(201).json({
-      success: true,
-      data: user,
-    });
+    res
+      .status(201)
+      .cookie("token", `token ${token}`, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 2,
+      })
+      .json({
+        success: true,
+        data: user,
+        token,
+      });
   }
 );
 
@@ -99,10 +120,18 @@ export const login = asyncHandeler(async (req: Req, res: Res, next: Next) => {
     }
   );
 
-  res.status(200).json({
-    success: true,
-    token,
-  });
+  res
+    .status(200)
+    .cookie("token", `token ${token}`, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 2,
+    })
+    .json({
+      success: true,
+      token,
+    });
 });
 
 // @route GET /api/v1/auth/getme

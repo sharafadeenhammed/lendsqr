@@ -1,14 +1,17 @@
 import express, { Request, Response, NextFunction } from "express";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import path from "path";
-import { connectDbAsync } from "./config/db";
+import { connectDbAsync, connectindDBReq } from "./config/db";
 import auth from "./routes/auth";
 import account from "./routes/account";
 import transaction from "./routes/transaction";
 import errorHandler from "./utils/errorHandler";
 import cors from "cors";
 import helmet from "helmet";
+import hpp from "hpp";
+import xss from "xss-clean";
 
 // load enviroment variables...
 dotenv.config({ path: path.join(__dirname, "../", "config.env") });
@@ -19,15 +22,24 @@ const app = express();
 
 app.use(morgan("dev"));
 
+// mount hpp
+app.use(hpp());
+
 // allow request from all url
 app.use(cors());
 
 // Set security headers
 app.use(helmet());
 
-app.use(express.json());
+// mounting xss security
+app.use(xss());
 
+// mounting body-parsers
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// mounting cookie parser
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "../", "public")));
 

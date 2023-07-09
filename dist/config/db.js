@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = exports.connectDbMigration = exports.connectDbAsync = exports.connect = exports.query = void 0;
+exports.db = exports.connectindDBReq = exports.connectDbMigration = exports.connectDbAsync = exports.connect = exports.query = void 0;
 const mysql_1 = __importDefault(require("mysql"));
 const util_1 = __importDefault(require("util"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -26,7 +26,7 @@ const connection = mysql_1.default.createConnection({
     port: Number(process.env.DATABASE_PORT) || 3306,
 });
 const connectionForDbMigrationOnly = mysql_1.default.createConnection({
-    host: process.env.DATABASE_HOST || "sql7.freemysqlhosting.net",
+    host: process.env.DATABASE_HOST || "sql7.freemysqlhosting.netr",
     user: process.env.DATABASE_USERNAME || "sql7630373",
     password: process.env.DATABASE_PASSWORD || "zJXDPrc2vg",
     port: Number(process.env.DATABASE_PORT) || 3306,
@@ -38,16 +38,25 @@ const connectionForDbMigration = util_1.default
     .bind(connectionForDbMigrationOnly);
 const connectindDB = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        (0, exports.connect)();
+        yield (0, exports.connect)();
         console.log(`\nconnected to database ${connection.config.host} on port ${connection.config.port} and using ${connection.config.database} database \n\n`);
     });
 };
 const connectDbAsync = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield connectindDB();
+    try {
+        yield connectindDB();
+    }
+    catch (error) {
+        console.log("Error: cannot connect to database");
+        console.log("\n\n", error);
+        console.log("\n exiting process");
+        process.exit(1);
+    }
 });
 exports.connectDbAsync = connectDbAsync;
 const connectDbMigration = () => __awaiter(void 0, void 0, void 0, function* () {
     yield connectionForDbMigration();
 });
 exports.connectDbMigration = connectDbMigration;
+exports.connectindDBReq = connectindDB;
 exports.db = connection;

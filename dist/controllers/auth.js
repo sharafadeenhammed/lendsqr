@@ -33,22 +33,40 @@ exports.createUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(v
         !address ||
         !age ||
         !phone_number) {
-        return next(new errorResponse_1.default("data field error: please include a first_name, last_name, password, email, address, age, and phone_number fields", 400));
+        return next(new errorResponse_1.default("please include a first_name, last_name, password, email, address, age, and phone_number fields", 400));
     }
     // hashing password...
     const salt = bcryptjs_1.default.genSaltSync(10);
     const hashedPassword = bcryptjs_1.default.hashSync(user.password, salt);
     user.password = hashedPassword;
     // adding user profile to database...
-    user = yield (0, User_1.addUser)(user);
-    user = JSON.parse(JSON.stringify(user));
+    let insertUser = yield (0, User_1.addUser)(user);
+    insertUser = JSON.parse(JSON.stringify(insertUser));
     // create user account
-    const account = yield (0, Account_1.addAccount)(user.insertId, "saving", 0, `${req.body.first_name} ${req.body.last_name}`);
-    user = req.body;
+    const account = yield (0, Account_1.addAccount)(insertUser.insertId, "saving", 0, `${req.body.first_name} ${req.body.last_name}`);
+    // generate token
+    const jwtPayload = {
+        id: insertUser.insertId,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+    };
+    const token = jsonwebtoken_1.default.sign(jwtPayload, process.env.JWT_SECRET || "lendsqr_secret", {
+        expiresIn: process.env.JWT_TOKEN_EXPIRES || "30d",
+    });
     delete user.password;
-    res.status(201).json({
+    res
+        .status(201)
+        .cookie("token", `token ${token}`, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 2,
+    })
+        .json({
         success: true,
         data: user,
+        token,
     });
 }));
 // @route POST /api/v1/auth/login
@@ -78,7 +96,15 @@ exports.login = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0
     const token = jsonwebtoken_1.default.sign(jwtPayload, process.env.JWT_SECRET || "lendsqr_secret", {
         expiresIn: process.env.JWT_TOKEN_EXPIRES || "30d",
     });
-    res.status(200).json({
+    res
+        .status(200)
+        .cookie("token", `token ${token}`, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 2,
+    })
+        .json({
         success: true,
         token,
     });

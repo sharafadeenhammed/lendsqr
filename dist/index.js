@@ -25,7 +25,10 @@ app.use((0, morgan_1.default)("dev"));
 // mount hpp
 app.use((0, hpp_1.default)());
 // allow request from all url
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: true,
+    credentials: true,
+}));
 // Set security headers
 app.use((0, helmet_1.default)());
 // mounting xss security

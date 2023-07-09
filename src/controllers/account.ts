@@ -39,14 +39,12 @@ export const getAccount = asyncHandeler(
 //@access PRIVATE
 export const fundAccount = asyncHandeler(
   async (req: Req, res: Res, next: Next) => {
-    const amount: number = req.body?.amount;
+    const amount: number = parseFloat(req.body?.amount);
     const id: number = parseInt(req.params.id, 10);
 
     // check if amount is not empty
     if (!amount || amount < 0) {
-      return next(
-        new ErrorResponse("invalid amount field in your request body ", 400)
-      );
+      return next(new ErrorResponse("The fund amount is invalid ", 400));
     }
     let account = await findAccount(id);
     // check if account is succesfully fetched...

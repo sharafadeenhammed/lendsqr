@@ -26,7 +26,12 @@ app.use(morgan("dev"));
 app.use(hpp());
 
 // allow request from all url
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 // Set security headers
 app.use(helmet());

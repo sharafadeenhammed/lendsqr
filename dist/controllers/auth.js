@@ -96,6 +96,7 @@ exports.login = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0
     const token = jsonwebtoken_1.default.sign(jwtPayload, process.env.JWT_SECRET || "lendsqr_secret", {
         expiresIn: process.env.JWT_TOKEN_EXPIRES || "30d",
     });
+    delete user.password;
     res
         .status(200)
         .cookie("token", `token ${token}`, {
@@ -107,6 +108,7 @@ exports.login = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0
         .json({
         success: true,
         token,
+        data: user,
     });
 }));
 // @route GET /api/v1/auth/getme

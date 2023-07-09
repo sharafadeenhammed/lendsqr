@@ -119,7 +119,7 @@ export const login = asyncHandeler(async (req: Req, res: Res, next: Next) => {
       expiresIn: process.env.JWT_TOKEN_EXPIRES || "30d",
     }
   );
-
+  delete user.password;
   res
     .status(200)
     .cookie("token", `token ${token}`, {
@@ -131,6 +131,7 @@ export const login = asyncHandeler(async (req: Req, res: Res, next: Next) => {
     .json({
       success: true,
       token,
+      data: user,
     });
 });
 

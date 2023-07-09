@@ -42,11 +42,11 @@ exports.getAccount = (0, asyncHandler_1.default)((req, res, next) => __awaiter(v
 //@access PRIVATE
 exports.fundAccount = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const amount = (_a = req.body) === null || _a === void 0 ? void 0 : _a.amount;
+    const amount = parseFloat((_a = req.body) === null || _a === void 0 ? void 0 : _a.amount);
     const id = parseInt(req.params.id, 10);
     // check if amount is not empty
     if (!amount || amount < 0) {
-        return next(new errorResponse_1.default("invalid amount field in your request body ", 400));
+        return next(new errorResponse_1.default("The fund amount is invalid ", 400));
     }
     let account = yield (0, Account_1.findAccount)(id);
     // check if account is succesfully fetched...

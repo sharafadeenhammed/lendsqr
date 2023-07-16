@@ -12,11 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAccounts = exports.fundAccount = exports.getAccount = void 0;
+exports.getAccounts = exports.fundAccount = exports.getAccount = exports.getAccountByAccountNumber = void 0;
 const Account_1 = require("../model/Account");
 const Transaction_1 = require("../model/Transaction");
 const errorResponse_1 = __importDefault(require("../utils/errorResponse"));
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
+//@route GET /api/v1/account/number/:number
+//@desc  get single account by account number
+//@access PRIVATE
+exports.getAccountByAccountNumber = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const accountNumber = parseInt(req.params.number, 10);
+    let account = yield (0, Account_1.findAccountByAccountNumber)(accountNumber);
+    // check if account is succesfully fetched...
+    if (!account || account.length === 0) {
+        return next(new errorResponse_1.default(`account with account number ${accountNumber} not found`, 404));
+    }
+    account = JSON.parse(JSON.stringify(account[0]));
+    console.log(account);
+    res.status(200).json({
+        success: true,
+        data: account,
+    });
+}));
 //@route GET /api/v1/account/:id
 //@desc  get single account
 //@access PRIVATE
@@ -25,7 +42,7 @@ exports.getAccount = (0, asyncHandler_1.default)((req, res, next) => __awaiter(v
     let account = yield (0, Account_1.findAccount)(id);
     // check if account is succesfully fetched...
     if (!account || account.length === 0) {
-        return next(new errorResponse_1.default(`account with the id of ${req.params.id} not found`, 404));
+        return next(new errorResponse_1.default(`account with the id of ${id} not found`, 404));
     }
     account = JSON.parse(JSON.stringify(account[0]));
     // check if account belongs to user.
@@ -66,10 +83,10 @@ exports.fundAccount = (0, asyncHandler_1.default)((req, res, next) => __awaiter(
         beneficiary_account_number: account.account_number,
         beneficiary_id: account.user_id,
         beneficiary_name: account.account_holder_name,
-        sender_account_id: account.id,
-        sender_account_number: account.account_number,
-        sender_id: account.user_id,
-        sender_name: account.account_holder_name,
+        sender_account_id: 0,
+        sender_account_number: "1122003967",
+        sender_id: 0,
+        sender_name: "account funder",
         user_id: account.user_id,
         account_id: account.id,
     });

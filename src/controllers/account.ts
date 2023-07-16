@@ -1,8 +1,38 @@
 import { Req, Res, Next } from "../utils/interface";
-import { findAccount, findAccounts, updateAccount } from "../model/Account";
+import {
+  findAccount,
+  findAccounts,
+  updateAccount,
+  findAccountByAccountNumber,
+} from "../model/Account";
 import { addTransaction } from "../model/Transaction";
 import ErrorResponse from "../utils/errorResponse";
 import asyncHandeler from "../utils/asyncHandler";
+
+//@route GET /api/v1/account/number/:number
+//@desc  get single account by account number
+//@access PRIVATE
+export const getAccountByAccountNumber = asyncHandeler(
+  async (req: Req, res: Res, next: Next) => {
+    const accountNumber: number = parseInt(req.params.number, 10);
+    let account = await findAccountByAccountNumber(accountNumber);
+    // check if account is succesfully fetched...
+    if (!account || account.length === 0) {
+      return next(
+        new ErrorResponse(
+          `account with account number ${accountNumber} not found`,
+          404
+        )
+      );
+    }
+    account = JSON.parse(JSON.stringify(account[0]));
+    console.log(account);
+    res.status(200).json({
+      success: true,
+      data: account,
+    });
+  }
+);
 
 //@route GET /api/v1/account/:id
 //@desc  get single account
@@ -14,10 +44,7 @@ export const getAccount = asyncHandeler(
     // check if account is succesfully fetched...
     if (!account || account.length === 0) {
       return next(
-        new ErrorResponse(
-          `account with the id of ${req.params.id} not found`,
-          404
-        )
+        new ErrorResponse(`account with the id of ${id} not found`, 404)
       );
     }
     account = JSON.parse(JSON.stringify(account[0]));
@@ -72,10 +99,10 @@ export const fundAccount = asyncHandeler(
       beneficiary_account_number: account.account_number,
       beneficiary_id: account.user_id,
       beneficiary_name: account.account_holder_name,
-      sender_account_id: account.id,
-      sender_account_number: account.account_number,
-      sender_id: account.user_id,
-      sender_name: account.account_holder_name,
+      sender_account_id: 0,
+      sender_account_number: "1122003967",
+      sender_id: 0,
+      sender_name: "account funder",
       user_id: account.user_id,
       account_id: account.id,
     });

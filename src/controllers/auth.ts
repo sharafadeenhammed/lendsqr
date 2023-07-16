@@ -150,3 +150,22 @@ export const getUser = asyncHandeler(async (req: Req, res: Res, next: Next) => {
     data: user,
   });
 });
+
+//@Desc   Logout user
+//@route  POST /api/v1/auth/logout
+//@access Public
+export const logoutUser = asyncHandeler(
+  async (req: Req, res: Res, next: Next) => {
+    res
+      .cookie("jwt", "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "developement",
+        expires: new Date(0),
+      })
+      .status(200)
+      .json({
+        message: "success",
+        token: "",
+      });
+  }
+);

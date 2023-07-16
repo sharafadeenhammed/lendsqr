@@ -10,4 +10,5 @@ const auth_2 = require("../controllers/auth");
 routes.post("/register", auth_2.createUser);
 routes.post("/login", auth_2.login);
 routes.get("/getme", auth_1.protect, auth_2.getUser);
+routes.get("/logout", auth_1.protect, auth_2.logoutUser);
 exports.default = routes;

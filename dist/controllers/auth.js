@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = exports.login = exports.createUser = void 0;
+exports.logoutUser = exports.getUser = exports.login = exports.createUser = void 0;
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 const errorResponse_1 = __importDefault(require("../utils/errorResponse"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
@@ -124,5 +124,21 @@ exports.getUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void
     res.status(200).json({
         success: true,
         data: user,
+    });
+}));
+//@Desc   Logout user
+//@route  POST /api/v1/auth/logout
+//@access Public
+exports.logoutUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    res
+        .cookie("jwt", "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "developement",
+        expires: new Date(0),
+    })
+        .status(200)
+        .json({
+        message: "success",
+        token: "",
     });
 }));

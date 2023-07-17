@@ -141,4 +141,5 @@ exports.logoutUser = (0, asyncHandler_1.default)((req, res, next) => __awaiter(v
         message: "success",
         token: "",
     });
+    console.log(new Date(0));
 }));

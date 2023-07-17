@@ -167,5 +167,6 @@ export const logoutUser = asyncHandeler(
         message: "success",
         token: "",
       });
+    console.log(new Date(0));
   }
 );
